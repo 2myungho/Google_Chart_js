@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CSS Style -->
+    <link rel="stylesheet" href="master.css">
+    <!-- Google Chart API -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+
+</head>
+
+<body style="background-color: #f2f2f2;">
+    <section>
+        <article id="input_box">
+            <table>
+                 <colgroup>
+                    <col width = "20%">
+                    <col width = "40%">
+                    <col width = "40%">
+                </colgroup>
+
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>평균 기온 ( ℃ )</th>
+                        <th>평균 습도 ( % )</th>
+                    </tr>
+                </thead>
+
+                <!-- js 사용 -->
+                <tbody id="table_data"></tbody>
+
+                <tfoot>
+                    <tr>
+                        <td colspan = "3" style="text-align: center;">
+                            <button type="submit" id="input_submit" onclick="onSubmit()">변경 적용</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan = "3" style="text-align: center;">
+                            <button type="button" id="random_submit">Random data</button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </article>
+
+        <article id="chart_box">
+            <div id="chart_div"></div>
+        </article>
+    </section>
+
+    <script type="text/javascript">
+        function buildTable(){
+            const table = document.getElementById("table_data");
+            for(let i = 0; i < 12; i++){
+                    var row = `
+                        <tr>
+                            <td>${i + 1} 월</td>
+                            <td><input type="text" id="tem${i}" class="tem" value=0 oninput = "tem_bg(${i})" ></td>
+                            <td><input type="text" id="hum${i}" class="hum" value=0 oninput = "hum_bg(${i})"></td>
+                        </tr>
+                    `
+                    table.innerHTML += row
+            }
+        }
+        buildTable()
+
+        //평균 기온 oninput
+        function tem_bg(e){
+            let tem = document.getElementById(`tem${e}`)
+            if(tem.value >= -50 && tem.value <= 50){
+                //-50 보다는 크거나 같고 50보다는 작거나 같아야한다.
+                //input 변경시 bg변경
+                tem.style.background = "#ffff99"
+            }else{
+                if(tem.value != '-'){
+                    alert("평균 온도는 -50도 이상 50도 이하의 수만 입력 가능합니다.")
+                    tem.value = 0;
+                }
+            }
+            
+        }
+        //평균 습도 oninput
+        function hum_bg(e){
+            let hum = document.getElementById(`hum${e}`)
+            if(hum.value >= 0 && hum.value <= 100){
+                //0 보다는 크거나 같고 100보다는 작거나 같아야한다.
+                //input 변경시 bg변경
+                hum.style.background = "#ffff99"
+            }else{
+                alert("평균 습도는 0도 이상 100도 이하의 수만 입력 가능합니다.")
+                hum.value = 0;
+            }
+            
+        }
+
+        //변경 적용시 input_bg 되돌리기
+        function onSubmit(){
+            for(let i = 0; i < 12; i++){
+                let tem = document.getElementById(`tem${i}`)
+                //style 제거 함수
+                tem.style.removeProperty("background");
+                
+                let hum = document.getElementById(`hum${i}`)
+                hum.style.removeProperty("background");
+            }
+        }
+    </script>
+
+</body>
+
+</html>
